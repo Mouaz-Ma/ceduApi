@@ -17,6 +17,7 @@ const createError = require('http-errors'),
     mongoSanitize = require('express-mongo-sanitize'),
            logger = require('morgan'),
               jwt = require('jsonwebtoken'),
+          ejsMate = require('ejs-mate'),
                io = require("socket.io")(http),
              cors = require('cors');
 
@@ -46,6 +47,11 @@ db.once("open", () => {
 
 const app = express();
 
+// view engine setup
+app.engine('ejs', ejsMate)
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'))
+
 
 app.use(cors());
 app.use(logger('dev'));
@@ -68,7 +74,7 @@ const store =  MongoDBStore.create({
 const sessionConfig = {
   store,
   name: 'session',
-  secret,
+  secret: process.env.SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: {
