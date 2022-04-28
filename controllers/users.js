@@ -14,6 +14,7 @@ const {
 // you need to add facebook and google here
 module.exports.register = async (req, res) => {
   try {
+    console.log(req.body)
     if (!req.body.email || !req.body.password) {
       res.json({
         success: false,
@@ -33,8 +34,7 @@ module.exports.register = async (req, res) => {
           expiresIn: 604800 // 1 week
         });
         const smtpTransport = nodemailer.createTransport({
-          host: "icgroupsfx.com",
-          port: 465,
+          service: "Gmail",
           auth: {
             user: process.env.MAILUSER,
             pass: process.env.MAILPASS
@@ -47,7 +47,7 @@ module.exports.register = async (req, res) => {
           subject: 'Verify new Account',
           text: 'Please click on the following link to verify your account: \n\n' +
             // add https to this and o the nuxt app home page and change the url
-            'https://icgroup.herokuapp.com/users/verify/' + uniqueString + '\n\n'
+            'https://ceduconsult.herokuapp.com/users/verify/' + uniqueString + '\n\n'
         };
         smtpTransport.sendMail(mailOptions, function (err) {
           if (err) {
@@ -117,8 +117,7 @@ module.exports.getVerified = async (req, res) => {
     console.log(req.params)
     const userFound = await User.findById(req.params.id)
     const smtpTransport = nodemailer.createTransport({
-      host: "icgroupsfx.com",
-      port: 465,
+      service: "Gmail",
       auth: {
         user: process.env.MAILUSER,
         pass: process.env.MAILPASS
@@ -131,7 +130,7 @@ module.exports.getVerified = async (req, res) => {
       subject: 'Verify Account Request',
       text: 'Please click on the following link to verify your account: \n\n' +
         // add https to this and o the nuxt app home page and change the url
-        'https://icgroup.herokuapp.com/users/verify/' + userFound.uniqueString + '\n\n'
+        'https://ceduconsult.herokuapp.com/users/verify/' + userFound.uniqueString + '\n\n'
     };
     smtpTransport.sendMail(mailOptions, function (err) {
       if (err) {
@@ -190,6 +189,7 @@ module.exports.login = async (req, res) => {
     const foundUser = await User.findOne({
       email: req.body.email
     });
+    console.log(foundUser)
     if (!foundUser || !req.body.password) {
       res.json({
         success: false,
@@ -272,8 +272,7 @@ module.exports.requestReset = (req, res, next) => {
     },
     function (token, user, done) {
       const smtpTransport = nodemailer.createTransport({
-        host: "icgroupsfx.com",
-        port: 465,
+        service: "Gmail",
         auth: {
           user: process.env.MAILUSER,
           pass: process.env.MAILPASS
@@ -286,7 +285,7 @@ module.exports.requestReset = (req, res, next) => {
         // dont forget the https and the domain name for the front end 
         text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
           'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-          'https://icgroup.herokuapp.com/users/reset/' + token + '\n\n' +
+          'https://ceduconsult.herokuapp.com/users/reset/' + token + '\n\n' +
           'If you did not request this, please ignore this email and your password will remain unchanged.\n'
       };
       smtpTransport.sendMail(mailOptions, function (err) {
@@ -352,8 +351,7 @@ module.exports.passResetPost = (req, res) => {
               expiresIn: 604800 // 1 week
             })
             let smtpTransport = nodemailer.createTransport({
-              host: "icgroupsfx.com",
-              port: 465,
+              service: "Gmail",
               auth: {
                 user: process.env.MAILUSER,
                 pass: process.env.MAILPASS
@@ -449,12 +447,11 @@ module.exports.contact = (req, res) => {
         initialInvestment = '100$';
     }
     const smtpTransport = nodemailer.createTransport({
-      host: "icgroupsfx.com",
-      port: 465,
+      service: "Gmail",
       auth: {
         user: process.env.MAILUSER,
         pass: process.env.MAILPASS
-      }
+      },
     });
     const mailOptions = {
       to: process.env.MAILUSER,
@@ -466,6 +463,7 @@ module.exports.contact = (req, res) => {
       if (err) {
         console.log(err)
       } else {
+        console.log('mail sent')
         res.json({
           success: true,
           message: 'An e-mail has been sent'

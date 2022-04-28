@@ -18,10 +18,7 @@ const UserSchema = new Schema({
     userType: {
         type: String
     },
-    affiliateReferance: {
-        type: Schema.Types.ObjectId,
-        ref: 'Affiliate'
-    },
+    avatar:ImageSchema,
     strategy: {
         type: String
     },
@@ -33,7 +30,6 @@ const UserSchema = new Schema({
         required: true,
         unique: true
     },
-    image: ImageSchema,
     email: {
         type: String,
         required: true,

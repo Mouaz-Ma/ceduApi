@@ -1,3 +1,4 @@
+const { date } = require('joi');
 const mongoose = require('mongoose');
 const Review = require('./review')
 const Schema = mongoose.Schema;
@@ -12,14 +13,19 @@ const ImageSchema = new Schema({
 
 const opts = { toJSON: { virtuals: true } };
 
-const BlogSchema = new Schema({
+const CourseSchema = new Schema({
     title: String,
     image: ImageSchema,
     tags: [{type: String}],
-    content: String,
+    starting: date,
+    description: String,
     author: {
         type: Schema.Types.ObjectId,
         ref: 'User'
+    },
+    university: {
+        type: Schema.Types.ObjectId,
+        ref: 'University'
     },
     reviews: [
         {
@@ -31,15 +37,15 @@ const BlogSchema = new Schema({
 }, { timestamps: true }, opts);
 
 
-BlogSchema.virtual('properties.popUpMarkup').get(function () {
+CourseSchema.virtual('properties.popUpMarkup').get(function () {
     return `
-    <strong><a href="/blogs/${this._id}">${this.title}</a><strong>
+    <strong><a href="/course/${this._id}">${this.title}</a><strong>
     <p>${this.content.substring(0, 20)}...</p>`
 });
 
 
 
-BlogSchema.post('findOneAndDelete', async function (doc) {
+CourseSchema.post('findOneAndDelete', async function (doc) {
     if (doc) {
         await Review.deleteMany({
             _id: {
@@ -49,4 +55,4 @@ BlogSchema.post('findOneAndDelete', async function (doc) {
     }
 })
 
-module.exports = mongoose.model('Blog', BlogSchema);
+module.exports = mongoose.model('Course', CourseSchema);
