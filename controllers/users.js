@@ -63,7 +63,15 @@ module.exports.register = async (req, res) => {
           }
         });
 
-      });
+      }).catch((err) => {
+        //When there are errors We handle them here
+        console.log(err);
+        res.json({
+          success: false,
+          message: "Couldn't create new account!"
+        })
+
+    });;
     }
   } catch (err) {
     console.log(err);
