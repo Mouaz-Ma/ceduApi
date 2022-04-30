@@ -56,7 +56,7 @@ module.exports.register = async (req, res) => {
             res.json({
               success: true,
               token: token,
-              message: "Your account has been saved"
+              message: "Your account has been saved! please check you email inbox for verification link,"
             })
             console.log('mail sent');
             // req.flash('success', 'An e-mail has been sent to ' + newUser.email + ' with further instructions.');
