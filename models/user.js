@@ -38,6 +38,12 @@ const UserSchema = new Schema({
     password: {
         type: String
     },
+    telephone: {
+        type: String
+    },
+    studentStatus: {
+        type: String
+    },
     userType: {
         type: String,
         default: 'Normal_User'

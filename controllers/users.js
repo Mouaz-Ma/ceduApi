@@ -27,7 +27,9 @@ module.exports.register = async (req, res) => {
         email: req.body.email,
         password: req.body.password,
         uniqueString: uniqueString,
-        strategy: req.body.strategy
+        strategy: req.body.strategy,
+        telephone: req.body.telephone,
+        
       });
       await newUser.save().then(() => {
         const token = jwt.sign(newUser.toJSON(), process.env.SECRETJWT, {
@@ -98,6 +100,7 @@ module.exports.registerSocial = async (req, res) => {
         username: req.body.username,
         email: req.body.email,
         strategy: req.body.strategy,
+        telephone: req.body.telephone,
         isVerified: true
       }, (err) => {
         if (err) console.log(err);
@@ -236,6 +239,7 @@ module.exports.updateUser = async (req, res) => {
       if (req.body.name) foundUser.name = req.body.name;
       if (req.body.email) foundUser.email = req.body.email;
       if (req.body.password) foundUser.password = req.body.password;
+      if (req.body.telephone) foundUser.telephone = req.body.telephone;
 
       await foundUser.save();
       res.json({
