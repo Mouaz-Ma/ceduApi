@@ -10,9 +10,9 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
     cloudinary,
     params: {
-        folder: 'ICGroup',
+        folder: 'CEDUTEST',
         resource_type: 'raw',
-        allowedFormats: ['jpeg', 'png', 'jpg', 'mp3'],
+        allowedFormats: ['jpeg', 'jpg'],
     }
 });
 
