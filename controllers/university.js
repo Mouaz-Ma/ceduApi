@@ -23,37 +23,28 @@ module.exports.index = async (req, res) => {
 // creating a new university
 module.exports.createUniversity = async (req, res, next) => {
     try{
-        console.log(req.body);
-        console.log(req.files);
-        // if (req.body.category === 'null'){
-        //     res.json({
-        //         success: false,
-        //         message: "Please Select a Categpry!"
-        //       })
-        // } else {
-        //     const university = new University(req.body);
-        //     university.tags = req.body.tagsInput.split(',');
-        //     if (!req.files.photo){
-        //         university.image = {url: 'https://res.cloudinary.com/mo3az/image/upload/v1648640118/ICGroup/towfiqu-barbhuiya-nApaSgkzaxg-unsplash_aiqkkn.jpg', filename: 'Default university Image'};
-        //     } else {
-        //         university.image = {url: req.files.photo[0].path, filename: req.files.photo[0].filename};
-        //     }
-        //     if (!req.files.audio){
-        //         university.audio = null
-        //     } else {
-        //         university.audio = {url: req.files.audio[0].path, filename: req.files.audio[0].filename, originalname: req.files.audio[0].originalname };
-        //     }
-        //     university.author = req.body.userID;
-        //     university.category = req.body.category;
-        //     await university.save();
-        //     res.json({
-        //         success: true,
-        //         university: university,
-        //         message: "Successfully made a new university!"
-        //       })
-        // }
+        console.log(req.files.logo)
+            const university = new University(req.body);
+            if(req.files.images){
+                req.files.images.forEach(image => {
+                    university.images.push({url: image.path, filename: image.filename })
+                });
+            }
+            university.logo = {url: req.files.logo[0].path, filename: req.files.logo[0].filename };
+            university.tags = req.body.tags.split(',');
+            university.author = req.body.userID;
+            await university.save();
+            res.json({
+                success: true,
+                university: university,
+                message: "Successfully made a new university!"
+              })
     } catch (err) {
         console.log(err);
+        res.json({
+            success: false,
+            message: err
+          })
     }
 }
 
