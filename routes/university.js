@@ -32,7 +32,7 @@ router.route('/new')
 
 router.route('/:id')
     .get(catchAsync(university.getSingle))
-    .put(upload.array('photo'), catchAsync(university.updateSingle))
+    .put(uploadFile, university.updateSingle)
     .delete(university.deleteSingle);
 
 
