@@ -52,7 +52,7 @@ module.exports.createUniversity = async (req, res, next) => {
 // showing single
 module.exports.getSingle = async (req, res) => {
     try{
-        const university = await University.findById(req.params.id).populate('author');
+        const university = await University.findById(req.params.id).populate(['author', 'courses']);
         res.json({
             success: true,
             university: university,

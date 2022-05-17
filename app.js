@@ -26,6 +26,7 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const blogsRouter = require('./routes/blogs');
 const universityRouter = require('./routes/university');
+const courseRouter = require('./routes/course');
 
 // error
 const ExpressError = require('./utils/ExpressError');
@@ -117,6 +118,7 @@ app.use('/', indexRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/blogs', blogsRouter);
 app.use('/api/university', universityRouter);
+app.use('/api/course', courseRouter);
 
 
   //  web sockets

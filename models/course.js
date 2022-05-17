@@ -17,7 +17,8 @@ const CourseSchema = new Schema({
     title: String,
     image: ImageSchema,
     tags: [{type: String}],
-    starting: date,
+    starting: Date,
+    courseType: String,
     description: String,
     author: {
         type: Schema.Types.ObjectId,
