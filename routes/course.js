@@ -32,8 +32,8 @@ router.route('/new')
 
 router.route('/:id')
     .get(catchAsync(course.getSingle))
-//     .put(uploadFile, course.updateSingle)
-//     .delete(course.deleteSingle);
+    .put(uploadFile, course.updateSingle)
+    .delete(course.deleteSingle);
 
 
 

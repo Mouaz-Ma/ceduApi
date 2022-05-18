@@ -70,75 +70,62 @@ module.exports.getSingle = async (req, res) => {
     }
 }
 
-// updating single university
-// module.exports.updateSingle = async (req, res) => {
-//     try {
+// updating single course
+module.exports.updateSingle = async (req, res) => {
+    try {
+        const university = await University.findById(req.body.uniSelected);
+        const oldUniversity = await University.findByIdAndUpdate(req.body.oldUniversity, { $pull: { courses: req.params.id } });
+        let course = await Course.findById(req.params.id);
+        course.title = req.body.title;
+        course.tags = req.body.tags.split(',');
+        course.description = req.body.description;
+        course.university = req.body.uniSelected;
+        course.starting = req.body.startingDate;
+        course.courseType = req.body.courseType;
+        if(req.files.image){
+                await cloudinary.uploader.destroy(req.body.deletetedImage, 
+                    {invalidate: true, resource_type: "raw"}, 
+                    function(error,result) {console.log(result, error) }); 
+                    course.image = ({url: req.files.image[0].path, filename: req.files.image[0].filename})
+            }
+        university.courses.push(course);
+        await oldUniversity.save()
+        await university.save();
+        await course.save();
+        res.status(200).json({
+            success: true,
+            course: course,
+            message: "Successfully updated University!"
+          })
 
-//         console.log(req.body)
-//         let university = await University.findById(req.params.id);
-//         university.title = req.body.title;
-//         university.tags = req.body.tags.split(',');
-//         university.description = req.body.description;
-//         console.log(req.body.deletedLogo)
-//         if(req.files.logo){
-//             await cloudinary.uploader.destroy(req.body.deletedLogo,
-//                 {invalidate: true, resource_type: "raw"},
-//                 function(error,result) {console.log(result, error) });
-//                 university.logo.url = req.files.logo[0].path
-//                 university.logo.filename =  req.files.logo[0].filename
-//         }
-//         if(req.files.images){
-//             for (const image in req.body.deletedimages){
-//                 await cloudinary.uploader.destroy(req.body.deletedimages[image], 
-//                     {invalidate: true, resource_type: "raw"}, 
-//                     function(error,result) {console.log(result, error) }); 
-//             }
-//             university.images = [];
-//             req.files.images.forEach(image => {
-//                 university.images.push({url: image.path, filename: image.filename})
-//             });
-//         }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            success: false,
+            message: err.message
+          })
+    }
+}
 
-//         await university.save();
-//         res.status(200).json({
-//             success: true,
-//             university: university,
-//             message: "Successfully updated University!"
-//           })
-
-//     } catch (err) {
-//         console.log(err);
-//         res.status(500).json({
-//             success: false,
-//             message: err.message
-//           })
-//     }
-// }
-
-// deleting single university
-// module.exports.deleteSingle = async (req, res) => {
-//     try {
-//         let deletedUniversity = await University.findOneAndDelete(req.params.id);
-//             await cloudinary.uploader.destroy(deletedUniversity.logo.filename,
-//             {invalidate: true, resource_type: "raw"},
-//             function(error,result) {console.log(result, error) });
-//         if (deletedUniversity.images.length){
-//             for (const image in deletedUniversity.images){
-//                 // console.log(`${deletedUniversity.images[image].filename}`);
-//                 await cloudinary.uploader.destroy(deletedUniversity.images[image].filename, 
-//                     {invalidate: true, resource_type: "raw"}, 
-//                     function(error,result) {console.log(result, error) }); 
-//             }
-//         }
-//             res.status(200).json({
-//                 success: true,
-//                 message: "Successfully deleted University!"
-//               })
-//     } catch (err) {
-//         console.log(err);
-//         res.status(500).json({
-//             success: false,
-//             message: err.message
-//           })
-//     }
-// }
+// deleting single course
+module.exports.deleteSingle = async (req, res) => {
+    try {
+        let course = await Course.findById(req.params.id).populate('university');
+        let oldUniversity = await University.findByIdAndUpdate(course.university.id, { $pull: { courses: req.params.id } });
+        await oldUniversity.save();
+        let deletedCourse = await Course.findOneAndDelete(req.params.id);
+            await cloudinary.uploader.destroy(deletedCourse.image.filename,
+            {invalidate: true, resource_type: "raw"},
+            function(error,result) {console.log(result, error) });
+            res.status(200).json({
+                success: true,
+                message: "Successfully deleted University!"
+              })
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            success: false,
+            message: err.message
+          })
+    }
+}
