@@ -23,7 +23,6 @@ module.exports.index = async (req, res) => {
 // creating a new university
 module.exports.createUniversity = async (req, res, next) => {
     try{
-        console.log(req.files.logo)
             const university = new University(req.body);
             if(req.files.images){
                 req.files.images.forEach(image => {
@@ -70,8 +69,6 @@ module.exports.getSingle = async (req, res) => {
 // updating single university
 module.exports.updateSingle = async (req, res) => {
     try {
-
-        console.log(req.body)
         let university = await University.findById(req.params.id);
         university.title = req.body.title;
         university.tags = req.body.tags.split(',');

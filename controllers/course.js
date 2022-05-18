@@ -25,7 +25,6 @@ module.exports.index = async (req, res) => {
 module.exports.createCourse = async (req, res, next) => {
     try{
             const university = await University.findById(req.body.uniSelected);
-            console.log(req.files)
             const course = new Course();
             course.title = req.body.title;
             course.image = {url: req.files.image[0].path, filename: req.files.image[0].filename };

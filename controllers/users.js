@@ -14,7 +14,6 @@ const {
 // you need to add facebook and google here
 module.exports.register = async (req, res) => {
   try {
-    console.log(req.body)
     if (!req.body.email || !req.body.password) {
       res.json({
         success: false,
