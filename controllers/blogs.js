@@ -42,6 +42,7 @@ module.exports.createBlog = async (req, res, next) => {
 module.exports.showBlog = async (req, res) => {
     try{
         const blog = await Blog.findById(req.params.id).populate('author');
+        console.log(blog)
         if (blog){
             res.json({
                 success: true,
@@ -65,49 +66,48 @@ module.exports.showBlog = async (req, res) => {
 
 
 // updating one blog
-// module.exports.updateBlog = async (req, res, next) => {
-//     try {
-//         console.log(req.body.deletedImage)
-//         if(!req.files[0]){
-//             let blog = await Blog.findOneAndUpdate({ _id: req.params.id}, {
-//                 $set: {
-//                     title: req.body.title,
-//                     tags: req.body.tagsInput.split(','),
-//                     content: req.body.content
-//                 }
-//             });
-//             await blog.save();
-//             res.status(200).json({
-//                 success: true,
-//                 blog: blog,
-//                 message: "Successfully updated blog!"
-//               })
-//         } else {
-//             let blog = await Blog.findOneAndUpdate({ _id: req.params.id}, {
-//                 $set: {
-//                     title: req.body.title,
-//                     tags: req.body.tagsInput.split(','),
-//                     image: {url: req.files[0].path, filename: req.files[0].filename},
-//                     content: req.body.content
-//                 }
-//             });
-//             await blog.save();
-//             await cloudinary.uploader.destroy(req.body.deletedImage, {invalidate: true, resource_type: "raw"}, function(error,result) {
-//                 console.log(result, error) });
-//             res.status(200).json({
-//                 success: true,
-//                 blog: blog,
-//                 message: "Successfully updated blog!"
-//               })
-//         }
-//     } catch (err) {
-//         console.log(err);
-//         res.status(500).json({
-//             success: false,
-//             message: err.message
-//           })
-//     }
-// }
+module.exports.updateBlog = async (req, res, next) => {
+    try {
+        if(!req.files.image[0]){
+            let blog = await Blog.findOneAndUpdate({ _id: req.params.id}, {
+                $set: {
+                    title: req.body.title,
+                    tags: req.body.tagsInput.split(','),
+                    content: req.body.content
+                }
+            });
+            await blog.save();
+            res.status(200).json({
+                success: true,
+                blog: blog,
+                message: "Successfully updated blog!"
+              })
+        } else {
+            let blog = await Blog.findOneAndUpdate({ _id: req.params.id}, {
+                $set: {
+                    title: req.body.title,
+                    tags: req.body.tagsInput.split(','),
+                    image: {url: req.files[0].path, filename: req.files[0].filename},
+                    content: req.body.content
+                }
+            });
+            await blog.save();
+            await cloudinary.uploader.destroy(req.body.deletedImage, {invalidate: true, resource_type: "raw"}, function(error,result) {
+                console.log(result, error) });
+            res.status(200).json({
+                success: true,
+                blog: blog,
+                message: "Successfully updated blog!"
+              })
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            success: false,
+            message: err.message
+          })
+    }
+}
 
 // deleting one blog
 module.exports.deleteBlog = async (req, res, next) => {
