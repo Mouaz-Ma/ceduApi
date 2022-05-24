@@ -38,6 +38,10 @@ const UserSchema = new Schema({
     password: {
         type: String
     },
+    classes: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Class'
+    }],
     telephone: {
         type: String
     },

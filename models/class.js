@@ -1,6 +1,6 @@
 const { date } = require('joi');
 const mongoose = require('mongoose');
-const Review = require('./review')
+// const Review = require('./review')
 const Schema = mongoose.Schema;
 
 
@@ -25,6 +25,10 @@ const ClassSchema = new Schema({
     type: String,
     zoomLink: String,
     description: String,
+    students: [{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }],
     author: {
         type: Schema.Types.ObjectId,
         ref: 'User'
@@ -47,14 +51,14 @@ ClassSchema.virtual('properties.popUpMarkup').get(function () {
 
 
 
-ClassSchema.post('findOneAndDelete', async function (doc) {
-    if (doc) {
-        await Review.deleteMany({
-            _id: {
-                $in: doc.reviews
-            }
-        })
-    }
-})
+// ClassSchema.post('findOneAndDelete', async function (doc) {
+//     if (doc) {
+//         await Review.deleteMany({
+//             _id: {
+//                 $in: doc.reviews
+//             }
+//         })
+//     }
+// })
 
 module.exports = mongoose.model('Class', ClassSchema);
