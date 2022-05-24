@@ -34,10 +34,8 @@ router.route('/new')
 
 router.route('/:id')
     .get(catchAsync(blogs.showBlog))
-    // .put(uploadFile, catchAsync(blogs.updateBlog))
+    .put(uploadFile, catchAsync(blogs.updateBlog))
     .delete(blogs.deleteBlog);
-
-// router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(blogs.renderEditForm))
 
 
 
