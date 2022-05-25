@@ -266,6 +266,7 @@ module.exports.requestReset = (req, res, next) => {
       User.findOne({
         email: req.body.email
       }, function (err, user) {
+        console.log(user)
         if (!user || req.body.email === null || user.strategy != "local") {
           res.json({
             success: false,

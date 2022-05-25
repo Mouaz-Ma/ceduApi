@@ -17,7 +17,7 @@ const ClassSchema = new Schema({
     title: String,
     image: ImageSchema,
     tags: [{type: String}],
-    schedule: date,
+    schedule: Date,
     instructor: {
         type: Schema.Types.ObjectId,
         ref: 'User'
