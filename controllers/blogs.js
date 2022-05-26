@@ -69,7 +69,7 @@ module.exports.showBlog = async (req, res) => {
 module.exports.updateBlog = async (req, res, next) => {
     try {
         if(!req.files.image){
-            let blog = await Blog.findOneAndUpdate({ _id: req.params.id});
+            let blog = await Blog.findOneAndUpdate(req.params.id);
             blog.title = req.body.title;
             blog.tags = req.body.tags.split(',');
             blog.content = req.body.description;
@@ -81,7 +81,7 @@ module.exports.updateBlog = async (req, res, next) => {
                 message: "Successfully updated blog!"
               })
         } else {
-            let blog = await Blog.findOneAndUpdate({ _id: req.params.id});
+            let blog = await Blog.findOneAndUpdate(req.params.id);
                 blog.title= req.body.title,
                 blog.tags= req.body.tags.split(','),
                 blog.image= {url: req.files.image[0].path, filename: req.files.image[0].filename},
