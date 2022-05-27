@@ -29,6 +29,9 @@ router.route('/varifyById/:id')
 // password reset
 router.route('/requestReset').post(users.requestReset)
 
+// search Users
+router.route('/search').get(users.searchUser)
+
 router.route('/passReset/:token')
     .get(users.passResetGet)
     .post(users.passResetPost)

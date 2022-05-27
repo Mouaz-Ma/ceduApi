@@ -56,8 +56,7 @@ module.exports.register = async (req, res) => {
           } else {
             res.json({
               success: true,
-              token: token,
-              message: "Your account has been saved! please check you email inbox for verification link,"
+              message: "New account has been saved! verification link sent"
             })
             console.log('mail sent');
             // req.flash('success', 'An e-mail has been sent to ' + newUser.email + ' with further instructions.');
@@ -483,6 +482,27 @@ module.exports.contact = (req, res) => {
       }
     });
   } catch (err) {
+    console.log(err)
+    res.json({
+      success: false,
+      message: err,
+    });
+  }
+}
+
+
+// search
+module.exports.searchUser = async (req, res) => {
+  try {
+    const q = req.query.q;
+    const usersFound = await User.find({username: {$regex: new RegExp(q), $options: 'i'}})
+    console.log(usersFound)
+    res.json({
+      success: true,
+      usersFound: usersFound,
+      message: 'found Users'
+    })
+  } catch (err){
     console.log(err)
     res.json({
       success: false,
