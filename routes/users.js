@@ -5,8 +5,9 @@ const catchAsync = require('../utils/catchAsync');
 const users = require('../controllers/users');
 const { isLoggedIn, isAuthor, validateAnalysis, verifyToken } = require('../middleware');
 
-
-
+// get one user 
+router.route('/userInfo/:id')
+    .get(users.getUser)
 router.route('/register')
     .post(catchAsync(users.register));
 

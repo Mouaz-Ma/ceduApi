@@ -510,3 +510,25 @@ module.exports.searchUser = async (req, res) => {
     });
   }
 }
+
+// get one user
+module.exports.getUser = async (req, res) => {
+  try{
+    console.log(req.params.id)
+    const userFound = await User.findOne({
+      _id: req.params.id
+    }).populate('classes')
+    console.log(userFound)
+    res.json({
+      success: true,
+      userFound: userFound,
+      message: 'found Users'
+    })
+  } catch(err){
+    console.log(err)
+    res.json({
+      success: false,
+      message: err,
+    });
+  }
+}
