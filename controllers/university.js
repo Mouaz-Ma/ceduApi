@@ -1,5 +1,6 @@
 const University = require('../models/university');
 const { cloudinary } = require("../cloudinary");
+const Course = require('../models/course');
 
 
 // get all universities 
@@ -111,8 +112,19 @@ module.exports.updateSingle = async (req, res) => {
 
 // deleting single university
 module.exports.deleteSingle = async (req, res) => {
+    let deletedUniversity = await University.findById(req.params.id);
+    console.log(deletedUniversity)
     try {
-        let deletedUniversity = await University.findOneAndDelete(req.params.id);
+        let deletedUniversity = await University.findByIdAndDelete(req.params.id);
+        if(deletedUniversity.courses.length != 0){
+        for (const subCourse of deletedUniversity.courses) {
+            console.log(subCourse)
+            // await Course.findByIdAndDelete(subCourse._id)
+            // await cloudinary.uploader.destroy(subCourse.image.filename,
+            //     {invalidate: true, resource_type: "raw"},
+            //     function(error,result) {console.log(result, error) });
+        }
+    }
             await cloudinary.uploader.destroy(deletedUniversity.logo.filename,
             {invalidate: true, resource_type: "raw"},
             function(error,result) {console.log(result, error) });

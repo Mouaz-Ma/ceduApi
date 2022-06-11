@@ -1,6 +1,6 @@
 const { date } = require('joi');
 const mongoose = require('mongoose');
-const Review = require('./review')
+const Course = require('./course')
 const Schema = mongoose.Schema;
 
 
@@ -42,17 +42,5 @@ UniversitySchema.virtual('properties.popUpMarkup').get(function () {
     <strong><a href="/University/${this._id}">${this.title}</a><strong>
     <p>${this.content.substring(0, 20)}...</p>`
 });
-
-
-
-UniversitySchema.post('findOneAndDelete', async function (doc) {
-    if (doc) {
-        await Review.deleteMany({
-            _id: {
-                $in: doc.reviews
-            }
-        })
-    }
-})
 
 module.exports = mongoose.model('University', UniversitySchema);
