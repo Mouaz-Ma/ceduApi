@@ -112,17 +112,16 @@ module.exports.updateSingle = async (req, res) => {
 
 // deleting single university
 module.exports.deleteSingle = async (req, res) => {
-    let deletedUniversity = await University.findById(req.params.id);
-    console.log(deletedUniversity)
+    let deletedUniversitywithCourses = await University.findById(req.params.id).populate('courses');
     try {
         let deletedUniversity = await University.findByIdAndDelete(req.params.id);
-        if(deletedUniversity.courses.length != 0){
-        for (const subCourse of deletedUniversity.courses) {
+        if(deletedUniversitywithCourses.courses.length != 0){
+        for (const subCourse of deletedUniversitywithCourses.courses) {
             console.log(subCourse)
-            // await Course.findByIdAndDelete(subCourse._id)
-            // await cloudinary.uploader.destroy(subCourse.image.filename,
-            //     {invalidate: true, resource_type: "raw"},
-            //     function(error,result) {console.log(result, error) });
+            await Course.findByIdAndDelete(subCourse._id)
+            await cloudinary.uploader.destroy(subCourse.image.filename,
+                {invalidate: true, resource_type: "raw"},
+                function(error,result) {console.log(result, error) });
         }
     }
             await cloudinary.uploader.destroy(deletedUniversity.logo.filename,
