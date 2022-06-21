@@ -128,3 +128,24 @@ module.exports.deleteClassRoom = async (req, res, next) => {
     }
 }
 
+
+// search
+module.exports.searchClass = async (req, res) => {
+    try {
+      const q = req.query.q;
+      console.log(q)
+      const classesFound = await ClassRoom.find({title: {$regex: new RegExp(q), $options: 'i'}})
+      console.log(classesFound)
+      res.json({
+        success: true,
+        classesFound: classesFound,
+        message: 'found Users'
+      })
+    } catch (err){
+      console.log(err)
+      res.json({
+        success: false,
+        message: err,
+      });
+    }
+  }

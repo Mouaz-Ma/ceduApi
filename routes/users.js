@@ -33,6 +33,13 @@ router.route('/requestReset').post(users.requestReset)
 // search Users
 router.route('/search').get(users.searchUser)
 
+// adding classroom to the user
+router.route('/addClassRoom/:classId/:userId')
+        .post(users.addClassRoom)
+// removing classroom from a user
+router.route('/removeClassRoom/:classId/:userId')
+        .post(users.removeClassRoom)
+
 router.route('/passReset/:token')
     .get(users.passResetGet)
     .post(users.passResetPost)

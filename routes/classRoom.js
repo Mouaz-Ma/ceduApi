@@ -30,7 +30,8 @@ router.route('/')
 router.route('/new')
 .post(uploadFile,  catchAsync(classRoom.createClassRoom))
 
-
+// search classRoom
+router.route('/search').get(classRoom.searchClass)
 
 router.route('/:id')
     .get(catchAsync(classRoom.showClassRoom))

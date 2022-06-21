@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const classRoom = require('../models/classRoom');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const crypto = require("crypto");
@@ -525,6 +526,39 @@ module.exports.getUser = async (req, res) => {
       message: 'found Users'
     })
   } catch(err){
+    console.log(err)
+    res.json({
+      success: false,
+      message: err,
+    });
+  }
+}
+
+// adding classroom to the user
+module.exports.addClassRoom = async (req, res) => {
+  try{
+    const ClassRoomFound = await classRoom.findById(req.params.classId)
+    const userFound = await User.findById(req.params.userId)
+    userFound.classes.push(ClassRoomFound)
+    await userFound.save()
+    console.log(userFound)
+  } catch (err){
+    console.log(err)
+    res.json({
+      success: false,
+      message: err,
+    });
+  }
+}
+
+// adding classroom to the user
+module.exports.removeClassRoom = async (req, res) => {
+  try{
+    const userFound = await User.findById(req.params.userId)
+    userFound.classes.pull(req.params.classId);
+    await userFound.save()
+    console.log(userFound)
+  } catch (err){
     console.log(err)
     res.json({
       success: false,
