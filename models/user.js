@@ -6,6 +6,11 @@ const ImageSchema = new Schema({
     url: String,
     filename: String
 });
+const docSchema = new Schema({
+    url: String,
+    filename: String
+});
+
 const bcrypt = require('bcrypt');
 
 ImageSchema.virtual('thumbnail').get(function () {
@@ -19,6 +24,7 @@ const UserSchema = new Schema({
         type: String
     },
     avatar:ImageSchema,
+    documents:[docSchema],
     strategy: {
         type: String
     },

@@ -437,27 +437,7 @@ module.exports.user = async (req, res) => {
 
 module.exports.contact = (req, res) => {
   try {
-    let investment = req.body.iniInvestment;
-    let initialInvestment = '0';
-    switch (investment) {
-      case 1:
-        initialInvestment = '100$';
-        break;
-      case 2:
-        initialInvestment = '1000$';
-        break;
-      case 3:
-        initialInvestment = '5000$';
-        break;
-      case 4:
-        initialInvestment = '10,000$';
-        break;
-      case 5:
-        initialInvestment = '50,000$';
-        break;
-      default:
-        initialInvestment = '100$';
-    }
+    console.log(req.body)
     const smtpTransport = nodemailer.createTransport({
       service: "Gmail",
       auth: {
@@ -469,7 +449,7 @@ module.exports.contact = (req, res) => {
       to: process.env.MAILUSER,
       from: req.body.email,
       subject: 'new inquiry from ' + req.body.name,
-      text: 'telphone number: ' + req.body.phone + ' \n' + 'email: ' + req.body.email + ' \n' + 'Trading Type: ' + req.body.tradingType + ' \n' + 'Initial Investment:' + initialInvestment + ' \n' + req.body.description + ' \n'
+      text: 'name: ' + req.body.name + ' \n' + 'telphone number: ' + req.body.phone + ' \n' + 'email: ' + req.body.email + ' \n' + 'Message: ' + req.body.message + ' \n' 
     };
     smtpTransport.sendMail(mailOptions, function (err) {
       if (err) {
@@ -478,7 +458,7 @@ module.exports.contact = (req, res) => {
         console.log('mail sent')
         res.json({
           success: true,
-          message: 'An e-mail has been sent'
+          message: 'We Got your engquiry we will get back to you ASAP'
         })
       }
     });
@@ -486,7 +466,7 @@ module.exports.contact = (req, res) => {
     console.log(err)
     res.json({
       success: false,
-      message: err,
+      message: 'somthing went wrong'
     });
   }
 }
