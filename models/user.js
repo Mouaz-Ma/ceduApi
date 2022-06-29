@@ -31,6 +31,9 @@ const UserSchema = new Schema({
     uniqueString: {
         type: String
     },
+    telephone: {
+        type: String
+    },
     username: {
         type: String,
         required: true,
@@ -48,9 +51,6 @@ const UserSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Class'
     }],
-    telephone: {
-        type: String
-    },
     studentStatus: {
         type: String
     },

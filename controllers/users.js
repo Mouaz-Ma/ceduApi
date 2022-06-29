@@ -227,22 +227,33 @@ module.exports.login = async (req, res) => {
     res.sendStatus(500);
   }
 }
+
 // updating profile
 module.exports.updateUser = async (req, res) => {
   try {
-    let foundUser = await User.findOne({
-      _id: req.decoded._id
-    })
-
+    const foundUser = await User.findById(req.params.id);
     if (foundUser) {
-      if (req.body.name) foundUser.name = req.body.name;
+      if (req.body.name) foundUser.username = req.body.name;
       if (req.body.email) foundUser.email = req.body.email;
-      if (req.body.password) foundUser.password = req.body.password;
       if (req.body.telephone) foundUser.telephone = req.body.telephone;
+      if (req.body.studentStatus) foundUser.studentStatus = req.body.studentStatus
 
+      // handeling image upload
+      if (req.files.avatar) {
+        foundUser.avatar = {url: req.files.avatar[0].path, filename: req.files.avatar[0].filename };
+        if (req.body.deletedAvatar){
+          await cloudinary.uploader.destroy(req.body.deletedAvatar, {invalidate: true, resource_type: "raw"}, function(error,result) {
+            console.log(result, error) });
+        }
+      }
+      // handeling documents
+      // if (req.files.docs.length != 0){
+
+      // }
       await foundUser.save();
       res.json({
         success: true,
+        foundUser: foundUser,
         message: "Successfully updated"
       })
     }
