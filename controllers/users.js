@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const crypto = require("crypto");
 const async = require("async");
+const { cloudinary } = require("../cloudinary");
 const {
   isLoggedIn,
   isAuthor,
@@ -238,7 +239,7 @@ module.exports.updateUser = async (req, res) => {
       if (req.body.telephone) foundUser.telephone = req.body.telephone;
       if (req.body.studentStatus) foundUser.studentStatus = req.body.studentStatus
 
-      // handeling image upload
+      // handling image upload
       if (req.files.avatar) {
         foundUser.avatar = {url: req.files.avatar[0].path, filename: req.files.avatar[0].filename };
         if (req.body.deletedAvatar){
@@ -246,7 +247,7 @@ module.exports.updateUser = async (req, res) => {
             console.log(result, error) });
         }
       }
-      // handeling documents
+      // handling documents
       // if (req.files.docs.length != 0){
 
       // }
