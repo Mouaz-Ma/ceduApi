@@ -240,7 +240,7 @@ module.exports.updateUser = async (req, res) => {
       if (req.body.studentStatus) foundUser.studentStatus = req.body.studentStatus
 
       // handling image upload
-      if (req.files.avatar) {
+      if (req.files) {
         foundUser.avatar = {url: req.files.avatar[0].path, filename: req.files.avatar[0].filename };
         if (req.body.deletedAvatar){
           await cloudinary.uploader.destroy(req.body.deletedAvatar, {invalidate: true, resource_type: "raw"}, function(error,result) {
