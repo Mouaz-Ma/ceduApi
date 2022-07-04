@@ -510,7 +510,7 @@ module.exports.getUser = async (req, res) => {
     console.log(req.params.id)
     const userFound = await User.findOne({
       _id: req.params.id
-    }).populate('classes')
+    }).populate('classes').populate('documents');
     console.log(userFound)
     res.json({
       success: true,
