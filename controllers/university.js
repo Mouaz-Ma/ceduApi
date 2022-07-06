@@ -74,7 +74,6 @@ module.exports.updateSingle = async (req, res) => {
         university.title = req.body.title;
         university.tags = req.body.tags.split(',');
         university.description = req.body.description;
-        console.log(req.body.deletedLogo)
         if(req.files.logo){
             await cloudinary.uploader.destroy(req.body.deletedLogo,
                 {invalidate: true, resource_type: "raw"},
@@ -117,7 +116,6 @@ module.exports.deleteSingle = async (req, res) => {
         let deletedUniversity = await University.findByIdAndDelete(req.params.id);
         if(deletedUniversitywithCourses.courses.length != 0){
         for (const subCourse of deletedUniversitywithCourses.courses) {
-            console.log(subCourse)
             await Course.findByIdAndDelete(subCourse._id)
             await cloudinary.uploader.destroy(subCourse.image.filename,
                 {invalidate: true, resource_type: "raw"},

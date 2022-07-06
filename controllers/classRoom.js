@@ -69,7 +69,7 @@ module.exports.showClassRoom = async (req, res) => {
 module.exports.updateClassRoom = async (req, res, next) => {
     try {
         if(!req.files.image){
-            let classRoom = await ClassRoom.findOneAndUpdate({ _id: req.params.id});
+            let classRoom = await ClassRoom.findByIdAndUpdate({ _id: req.params.id});
             classRoom.title = req.body.title;
             classRoom.tags = req.body.tags.split(',');
             classRoom.content = req.body.description;
@@ -81,7 +81,7 @@ module.exports.updateClassRoom = async (req, res, next) => {
                 message: "Successfully updated classRoom!"
               })
         } else {
-            let classRoom = await ClassRoom.findOneAndUpdate({ _id: req.params.id});
+            let classRoom = await ClassRoom.findByIdAndUpdate({ _id: req.params.id});
                 classRoom.title= req.body.title,
                 classRoom.tags= req.body.tags.split(','),
                 classRoom.image= {url: req.files.image[0].path, filename: req.files.image[0].filename},
@@ -113,7 +113,6 @@ module.exports.deleteClassRoom = async (req, res, next) => {
         if (deletedclassRoom){
             await cloudinary.uploader.destroy(deletedclassRoom.image.filename, {invalidate: true, resource_type: "raw"},function(error,result) {
                 console.log(result, error) });
-            console.log(deletedclassRoom)
             res.status(200).json({
                 success: true,
                 message: "Successfully deleted class room!"
@@ -133,9 +132,7 @@ module.exports.deleteClassRoom = async (req, res, next) => {
 module.exports.searchClass = async (req, res) => {
     try {
       const q = req.query.q;
-      console.log(q)
       const classesFound = await ClassRoom.find({title: {$regex: new RegExp(q), $options: 'i'}})
-      console.log(classesFound)
       res.json({
         success: true,
         classesFound: classesFound,

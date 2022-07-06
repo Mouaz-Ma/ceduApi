@@ -232,32 +232,29 @@ module.exports.login = async (req, res) => {
 // updating profile
 module.exports.updateUser = async (req, res) => {
   try {
-    const foundUser = await User.findById(req.params.id);
-    if (foundUser) {
-      if (req.body.name) foundUser.username = req.body.name;
-      if (req.body.email) foundUser.email = req.body.email;
-      if (req.body.telephone) foundUser.telephone = req.body.telephone;
-      if (req.body.studentStatus) foundUser.studentStatus = req.body.studentStatus
+    console.log(req.params.id)
+    const foundUser = await User.findByIdAndUpdate(req.params.id);
+      if(foundUser.username != req.body.username) {foundUser.username = req.body.username;}
+      foundUser.email = req.body.email;
+      foundUser.telephone = req.body.telephone;
+      foundUser.studentStatus = req.body.studentStatus
 
       // handling image upload
-      if (req.files) {
+      if (req.files.avatar) {
         foundUser.avatar = {url: req.files.avatar[0].path, filename: req.files.avatar[0].filename };
         if (req.body.deletedAvatar){
           await cloudinary.uploader.destroy(req.body.deletedAvatar, {invalidate: true, resource_type: "raw"}, function(error,result) {
             console.log(result, error) });
         }
       }
-      // handling documents
-      // if (req.files.docs.length != 0){
 
-      // }
       await foundUser.save();
       res.json({
         success: true,
         foundUser: foundUser,
         message: "Successfully updated"
       })
-    }
+      console.log(foundUser)
   } catch (err) {
     console.log(err);
     res.sendStatus(500);
