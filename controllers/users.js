@@ -237,8 +237,7 @@ module.exports.updateUser = async (req, res) => {
       if(foundUser.username != req.body.username) {foundUser.username = req.body.username;}
       foundUser.email = req.body.email;
       foundUser.telephone = req.body.telephone;
-      foundUser.studentStatus = req.body.studentStatus
-
+      foundUser.studentStatus = req.body.studentStatus;
       // handling image upload
       if (req.files.avatar) {
         foundUser.avatar = {url: req.files.avatar[0].path, filename: req.files.avatar[0].filename };
@@ -247,7 +246,6 @@ module.exports.updateUser = async (req, res) => {
             console.log(result, error) });
         }
       }
-
       await foundUser.save();
       res.json({
         success: true,
@@ -260,6 +258,10 @@ module.exports.updateUser = async (req, res) => {
     res.sendStatus(500);
   }
 }
+
+// upload documents to the cloud and add it to the list of the student
+
+// delete document from the cloud and remove it from the student
 
 
 // reset password
