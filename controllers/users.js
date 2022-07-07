@@ -532,7 +532,10 @@ module.exports.addClassRoom = async (req, res) => {
     const userFound = await User.findById(req.params.userId)
     userFound.classes.push(ClassRoomFound)
     await userFound.save()
-    console.log(userFound)
+    res.json({
+      success: true,
+      message: 'ClassRoom added to user'
+    })
   } catch (err){
     console.log(err)
     res.json({
@@ -548,7 +551,10 @@ module.exports.removeClassRoom = async (req, res) => {
     const userFound = await User.findById(req.params.userId)
     userFound.classes.pull(req.params.classId);
     await userFound.save()
-    console.log(userFound)
+    res.json({
+      success: true,
+      message: 'ClassRoom removed from user'
+    })
   } catch (err){
     console.log(err)
     res.json({
