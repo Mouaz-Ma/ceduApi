@@ -563,3 +563,37 @@ module.exports.removeClassRoom = async (req, res) => {
     });
   }
 }
+
+// adding classroom to the user
+module.exports.addDocuments = async (req, res) => {
+  try{
+    console.log(req.files);
+    res.json({
+      success: true,
+      message: 'ClassRoom added to user'
+    })
+  } catch (err){
+    console.log(err)
+    res.json({
+      success: false,
+      message: err,
+    });
+  }
+}
+
+// adding classroom to the user
+module.exports.removeDocument = async (req, res) => {
+  try{
+    console.log(req.body)
+    res.json({
+      success: true,
+      message: 'ClassRoom removed from user'
+    })
+  } catch (err){
+    console.log(err)
+    res.json({
+      success: false,
+      message: err,
+    });
+  }
+}

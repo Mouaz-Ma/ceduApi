@@ -77,6 +77,14 @@ router.route('/removeClassRoom/:classId/:userId')
 router.route('/updateUser/:id')
     .put(uploadFile, users.updateUser)
 
+// adding documents to the user
+router.route('/addDocuments/:userId')
+.post(uploadFile, users.addDocuments)
+
+// removing documents from a user
+router.route('/removeDocument/:userId')
+.post(users.removeDocument)  
+
 
 router.post('/logout', users.logout)
 
