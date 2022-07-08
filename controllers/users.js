@@ -125,7 +125,6 @@ module.exports.registerSocial = async (req, res) => {
 
 module.exports.getVerified = async (req, res) => {
   try {
-    console.log(req.params)
     const userFound = await User.findById(req.params.id)
     const smtpTransport = nodemailer.createTransport({
       service: "Gmail",
@@ -200,7 +199,6 @@ module.exports.login = async (req, res) => {
     const foundUser = await User.findOne({
       email: req.body.email
     });
-    console.log(foundUser)
     if (!foundUser || !req.body.password) {
       res.json({
         success: false,
@@ -232,7 +230,6 @@ module.exports.login = async (req, res) => {
 // updating profile
 module.exports.updateUser = async (req, res) => {
   try {
-    console.log(req.params.id)
     const foundUser = await User.findByIdAndUpdate(req.params.id);
       if(foundUser.username != req.body.username) {foundUser.username = req.body.username;}
       foundUser.email = req.body.email;
@@ -252,7 +249,6 @@ module.exports.updateUser = async (req, res) => {
         foundUser: foundUser,
         message: "Successfully updated"
       })
-      console.log(foundUser)
   } catch (err) {
     console.log(err);
     res.sendStatus(500);
@@ -277,7 +273,6 @@ module.exports.requestReset = (req, res, next) => {
       User.findOne({
         email: req.body.email
       }, function (err, user) {
-        console.log(user)
         if (!user || req.body.email === null || user.strategy != "local") {
           res.json({
             success: false,
@@ -336,7 +331,6 @@ module.exports.passResetGet = (req, res) => {
       $gt: Date.now()
     }
   }, function (err, user) {
-    console.log(user.strategy)
     if (!user || user.strategy != "local") {
       res.json({
         success: false,
@@ -448,7 +442,6 @@ module.exports.user = async (req, res) => {
 
 module.exports.contact = (req, res) => {
   try {
-    console.log(req.body)
     const smtpTransport = nodemailer.createTransport({
       service: "Gmail",
       auth: {
@@ -488,7 +481,6 @@ module.exports.searchUser = async (req, res) => {
   try {
     const q = req.query.q;
     const usersFound = await User.find({username: {$regex: new RegExp(q), $options: 'i'}})
-    console.log(usersFound)
     res.json({
       success: true,
       usersFound: usersFound,
@@ -506,11 +498,9 @@ module.exports.searchUser = async (req, res) => {
 // get one user
 module.exports.getUser = async (req, res) => {
   try{
-    console.log(req.params.id)
     const userFound = await User.findOne({
       _id: req.params.id
     }).populate('classes').populate('documents');
-    console.log(userFound)
     res.json({
       success: true,
       userFound: userFound,
@@ -567,10 +557,15 @@ module.exports.removeClassRoom = async (req, res) => {
 // adding classroom to the user
 module.exports.addDocuments = async (req, res) => {
   try{
-    console.log(req.files);
+    const userFound = await User.findById(req.params.userId)
+    console.log(userFound)
+    req.files.docs.forEach(element => {
+      userFound.documents.push({ url: element.path , filename : element.filename , fileTitle: element.originalname})
+    });
+    await userFound.save()
     res.json({
       success: true,
-      message: 'ClassRoom added to user'
+      message: 'Documents added to user'
     })
   } catch (err){
     console.log(err)
@@ -584,7 +579,14 @@ module.exports.addDocuments = async (req, res) => {
 // adding classroom to the user
 module.exports.removeDocument = async (req, res) => {
   try{
-    console.log(req.body)
+    await User.findOneAndUpdate({ _id: req.params.userId}, { $pull: { documents: { filename: req.body.fileName } } }, { new: true }, function(err){
+      if (err){
+        console.log(err)
+      }
+    }).clone()
+    await cloudinary.uploader.destroy(req.body.fileName, {invalidate: true, resource_type: "raw"}, function(error,result) {
+      console.log(result, error) });
+    // await userFound.save()
     res.json({
       success: true,
       message: 'ClassRoom removed from user'

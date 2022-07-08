@@ -8,7 +8,8 @@ const ImageSchema = new Schema({
 });
 const docSchema = new Schema({
     url: String,
-    filename: String
+    filename: String,
+    fileTitle: String
 });
 
 const bcrypt = require('bcrypt');
