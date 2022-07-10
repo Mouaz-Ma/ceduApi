@@ -76,6 +76,9 @@ router.route('/removeClassRoom/:classId/:userId')
 // updating users and documents
 router.route('/updateUser/:id')
     .put(uploadFile, users.updateUser)
+// handeling avatar change
+router.route('/updateUserAvatar/:id')
+    .put(uploadFile, users.updateUserAvatar)
 
 // adding documents to the user
 router.route('/addDocuments/:userId')
