@@ -234,7 +234,7 @@ module.exports.updateUser = async (req, res) => {
     const foundUser = await User.findByIdAndUpdate(req.params.id);
       foundUser.username = req.body.username;
       foundUser.email = req.body.email;
-      foundUser.telephone = req.body.telephone;
+      foundUser.telephone = req.body.phone;
       foundUser.studentStatus = req.body.studentStatus;
       await foundUser.save();
       res.json({
