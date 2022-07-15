@@ -436,7 +436,7 @@ module.exports.user = async (req, res) => {
   try {
     let foundUser = await User.findOne({
       _id: req.decoded._id
-    });
+    }).populate('classes');
     if (foundUser) {
       res.json({
         success: true,

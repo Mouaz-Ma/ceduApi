@@ -73,7 +73,9 @@ module.exports.updateClassRoom = async (req, res, next) => {
             classRoom.title = req.body.title;
             classRoom.tags = req.body.tags.split(',');
             classRoom.content = req.body.description;
-            classRoom.section = req.body.section;
+            classRoom.classDate = req.body.classDate;
+            classRoom.classTime = req.body.classTime;
+            classRoom.zoomLink = req.body.zoomLink;
             await classRoom.save();
             res.status(200).json({
                 success: true,
@@ -86,7 +88,9 @@ module.exports.updateClassRoom = async (req, res, next) => {
                 classRoom.tags= req.body.tags.split(','),
                 classRoom.image= {url: req.files.image[0].path, filename: req.files.image[0].filename},
                 classRoom.content= req.body.description
-                classRoom.section = req.body.section;
+                classRoom.classDate = req.body.classDate;
+                classRoom.classTime = req.body.classTime;
+                classRoom.zoomLink = req.body.zoomLink;
             
             await classRoom.save();
             await cloudinary.uploader.destroy(req.body.deletedImage, {invalidate: true, resource_type: "raw"}, function(error,result) {
@@ -109,7 +113,7 @@ module.exports.updateClassRoom = async (req, res, next) => {
 // deleting one classRoom
 module.exports.deleteClassRoom = async (req, res, next) => {
     try {
-        let deletedclassRoom = await classRoom.findOneAndDelete({ _id: req.params.id });
+        let deletedclassRoom = await ClassRoom.findByIdAndDelete({ _id: req.params.id });
         if (deletedclassRoom){
             await cloudinary.uploader.destroy(deletedclassRoom.image.filename, {invalidate: true, resource_type: "raw"},function(error,result) {
                 console.log(result, error) });
