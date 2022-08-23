@@ -52,7 +52,7 @@ ClassSchema.virtual('properties.popUpMarkup').get(function () {
 
 
 
-// ClassSchema.post('findOneAndDelete', async function (doc) {
+// ClassSchema.post('findByIdAndDelete', async function (doc) {
 //     if (doc) {
 //         await Review.deleteMany({
 //             _id: {

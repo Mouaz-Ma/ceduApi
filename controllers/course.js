@@ -113,7 +113,7 @@ module.exports.deleteSingle = async (req, res) => {
         let course = await Course.findById(req.params.id).populate('university');
         let oldUniversity = await University.findByIdAndUpdate(course.university.id, { $pull: { courses: req.params.id } });
         await oldUniversity.save();
-        let deletedCourse = await Course.findOneAndDelete(req.params.id);
+        let deletedCourse = await Course.findByIdAndDelete(req.params.id);
             await cloudinary.uploader.destroy(deletedCourse.image.filename,
             {invalidate: true, resource_type: "raw"},
             function(error,result) {console.log(result, error) });
