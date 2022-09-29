@@ -20,6 +20,11 @@ const CourseSchema = new Schema({
     starting: Date,
     courseType: String,
     description: String,
+    yearsOfStuday: String,
+    languageOfInstruction: String,
+    ects: String,
+    availability: String,
+    degreeAwarded: String,
     author: {
         type: Schema.Types.ObjectId,
         ref: 'User'

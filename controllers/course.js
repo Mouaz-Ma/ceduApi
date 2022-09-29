@@ -25,6 +25,7 @@ module.exports.index = async (req, res) => {
 module.exports.createCourse = async (req, res, next) => {
     try{
             const university = await University.findById(req.body.uniSelected);
+            console.log(university)
             const course = new Course();
             course.title = req.body.title;
             course.image = {url: req.files.image[0].path, filename: req.files.image[0].filename };
@@ -34,6 +35,11 @@ module.exports.createCourse = async (req, res, next) => {
             course.starting = req.body.startingDate;
             course.courseType = req.body.courseType;
             course.university = req.body.uniSelected;
+            course.yearsOfStuday = req.body.yearsOfStuday;
+            course.languageOfInstruction = req.body.languageOfInstruction;
+            course.ects = req.body.ects;
+            course.availability = req.body.availability;
+            course.degreeAwarded = req.body.degreeAwarded;
             university.courses.push(course);
             await university.save();
             await course.save();
@@ -73,6 +79,7 @@ module.exports.getSingle = async (req, res) => {
 // updating single course
 module.exports.updateSingle = async (req, res) => {
     try {
+        console.log(req.body)
         const university = await University.findById(req.body.uniSelected);
         const oldUniversity = await University.findByIdAndUpdate(req.body.oldUniversity, { $pull: { courses: req.params.id } });
         let course = await Course.findById(req.params.id);
@@ -82,6 +89,11 @@ module.exports.updateSingle = async (req, res) => {
         course.university = req.body.uniSelected;
         course.starting = req.body.startingDate;
         course.courseType = req.body.courseType;
+        course.yearsOfStuday = req.body.yearsOfStuday;
+        course.languageOfInstruction = req.body.languageOfInstruction;
+        course.ects = req.body.ects;
+        course.availability = req.body.availability;
+        course.degreeAwarded = req.body.degreeAwarded;
         if(req.files.image){
                 await cloudinary.uploader.destroy(req.body.deletetedImage, 
                     {invalidate: true, resource_type: "raw"}, 
@@ -89,6 +101,7 @@ module.exports.updateSingle = async (req, res) => {
                     course.image = ({url: req.files.image[0].path, filename: req.files.image[0].filename})
             }
         university.courses.push(course);
+        console.log(oldUniversity)
         await oldUniversity.save()
         await university.save();
         await course.save();
